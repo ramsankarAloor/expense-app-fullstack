@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <header>
+      <h1>Expense Tracker</h1>
+    </header>
+
+    <section class="container">
+      <form id="my-form">
+        <h1>Add expense</h1>
+        <div class="msg"></div>
+        <div>
+          <label for="amount">Expense amount:</label>
+          <input type="text" id="amount" pattern="[0-9]+" required>
+        </div>
+        <div>
+          <label for="description">Description:</label>
+          <input type="text" id="description">
+        </div>
+        <div>
+          <label for="dropdown">Category:</label>
+          <select id="dropdown" class="form-select">
+            <option value="Food">Food</option>
+            <option value="Fuel">Fuel</option>
+            <option value="Books">Books</option>
+            <option value="Others">Others</option>
+          </select>
+        </div>
+        <input class="btn" type="submit" value="Submit">
+      </form>
+
+      <ul id="users"></ul>
+
+      <ul class="items" id="items">
+        <!-- <li class="item">Item 1</li>
+        <li class="item">Item 2</li>
+        <li class="item">Item 3</li> -->
+      </ul>
+
+    </section>
+    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
