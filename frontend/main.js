@@ -1,6 +1,21 @@
 let form = document.getElementById("my-form");
 
-form.addEventListener("submit", postNewExpense);
+let editId = 0;
+
+form.addEventListener("submit", onCickSubmit);
+
+function onCickSubmit(event){
+  event.preventDefault();
+  if(editId === 0){
+    postNewExpense();
+  }else{
+    editExpense();
+  }
+
+  document.getElementById("amount").value = "";
+  document.getElementById("description").value = "";
+  document.getElementById("dropdown").value = "Food";
+}
 
 window.onload = loadData;
 
@@ -12,7 +27,8 @@ async function loadData() {
 }
 
 function displayRecord(object) {
-  let toBePrinted = object.amount + " - " + object.description + " - " + object.category;
+  let toBePrinted =
+    object.amount + " - " + object.description + " - " + object.category;
 
   let textInside = document.createTextNode(toBePrinted);
   let deleteBtn = document.createElement("button");
@@ -31,29 +47,56 @@ function displayRecord(object) {
   ul.appendChild(li);
 
   deleteBtn.addEventListener("click", deleteExpense);
-  
-  async function deleteExpense(event){
+  editBtn.addEventListener("click", populateFields);
+
+  async function deleteExpense(event) {
     await axios.delete(`http://localhost:3000/user/expenses/${object.id}`);
     window.location.reload();
   }
+
+  function populateFields(event) {
+    editId = object.id;
+    document.getElementById("amount").value = object.amount;
+    document.getElementById("description").value = object.description;
+    document.getElementById("dropdown").value = object.category;
+  }
 }
 
-async function postNewExpense(event) {
-  event.preventDefault();
+async function postNewExpense() {
   let amount = document.getElementById("amount").value;
   let description = document.getElementById("description").value;
   let category = document.getElementById("dropdown").value;
 
   const obj = {
-    "amount": amount,
-    "description": description,
-    "category": category,
+    amount: amount,
+    description: description,
+    category: category,
   };
 
-  const result = await axios.post("http://localhost:3000/user/new-expense", obj);
+  const result = await axios.post(
+    "http://localhost:3000/user/new-expense",
+    obj
+  );
   displayRecord(result.data);
 
-  document.getElementById("amount").value = "";
-  document.getElementById("description").value = "";
-  document.getElementById("dropdown").value = "Food";
+}
+
+async function editExpense(){
+  let amount = document.getElementById("amount").value;
+  let description = document.getElementById("description").value;
+  let category = document.getElementById("dropdown").value;
+
+  const obj = {
+    amount: amount,
+    description: description,
+    category: category,
+  };
+
+  const result = await axios.put(
+    `http://localhost:3000/user/expenses/${editId}`,
+    obj
+  );
+  editId = 0;
+  window.location.reload();
+
 }
